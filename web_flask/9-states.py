@@ -1,28 +1,35 @@
 #!/usr/bin/python3
-"""Script that starts a web application"""
-
-from models import storage
+""" Write a script that starts a Flask web application:
+"""
+from flask import Flask
+from flask import render_template
 from models.state import State
-from flask import Flask, render_template
+from models import storage
 
 
 app = Flask(__name__)
+state_id = None
 
-def teardown_data(self):
-    """ refresh data """
+
+@app.teardown_appcontext
+def close_session(exception):
+    """ remove the current SQLalchemy session """
     storage.close()
 
-@app.route('/states', strict_slashes=False)
-@app.route('/states/<id>', strict_slashes=False)
-def state_id(id=None):
-    states = storage.all(State).values()
-    states_none = None
-    for state in states:
-        if id == state.id:
-            states_none = state
-            break
-    return render_template('9-states.html', states=states, id=id, states_none=states_none)
+@app.route("/states", strict_slashes=False)
+def states():
+    states = storage.all(State)
+    states_list = sorted(states.values(), key=lambda x: x.name)
+    return render_template("9-states.html", states=states_list)
+
+@app.route("/states/<id>", strict_slashes=False)
+def states_id(id):
+    states = storage.all(State)
+    for state in states.values():
+        if state.id == id:
+            state_id = state
+    return render_template("9-states.html", state_id=state_id)
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)
