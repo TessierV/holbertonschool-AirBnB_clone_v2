@@ -8,13 +8,12 @@ from models import storage
 
 
 app = Flask(__name__)
-state_id = None
-
 
 @app.teardown_appcontext
 def close_session(exception):
     """ remove the current SQLalchemy session """
     storage.close()
+
 
 @app.route("/states", strict_slashes=False)
 def states():
@@ -22,8 +21,10 @@ def states():
     states_list = sorted(states.values(), key=lambda x: x.name)
     return render_template("9-states.html", states=states_list)
 
+
 @app.route("/states/<id>", strict_slashes=False)
 def states_id(id):
+    state_id = None
     states = storage.all(State)
     for state in states.values():
         if state.id == id:
