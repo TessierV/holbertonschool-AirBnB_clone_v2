@@ -9,11 +9,6 @@ from models import storage
 
 app = Flask(__name__)
 
-@app.teardown_appcontext
-def close_session(exception):
-    """ remove the current SQLalchemy session """
-    storage.close()
-
 
 @app.route("/states", strict_slashes=False)
 def states():
@@ -30,6 +25,12 @@ def states_id(id):
         if state.id == id:
             state_id = state
     return render_template("9-states.html", state_id=state_id)
+
+
+@app.teardown_appcontext
+def close_session(exception):
+    """ remove the current SQLalchemy session """
+    storage.close()
 
 
 if __name__ == '__main__':
