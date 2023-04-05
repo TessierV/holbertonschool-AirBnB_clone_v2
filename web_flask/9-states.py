@@ -26,7 +26,6 @@ def states_id(id=None):
     info = []
     states = storage.all(State)
     if id is None:
-        states_list = sorted(states.values(), key=lambda x: x.name)
         for k in states:
             info.append(states[k])
     else:
