@@ -10,7 +10,7 @@
         {% for state in states|sort(attribute="name") %}
             <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
         {% endfor %}
-        </UL>
+        </UL>
         {% elif states != None and id != None %}
         <H1>State: {{ states.name }}</H1>
         <H3>Cities:</H3>
