@@ -1,39 +1,28 @@
 #!/usr/bin/python3
-"""
-flask model
-"""
-from flask import Flask, render_template
+"""Script that starts a web application"""
+
 from models import storage
 from models.state import State
+from flask import Flask, render_template
+
+
 app = Flask(__name__)
-storage.all()
 
-
-@app.teardown_appcontext
 def teardown_data(self):
-    """
-        refrech data
-    """
+    """ refresh data """
     storage.close()
 
-
 @app.route('/states', strict_slashes=False)
-@app.route("/states/<id>", strict_slashes=False)
-def states_id(id=None):
-    """
-        list state by id if found
-    """
-    info = []
-    states = storage.all(State)
-    if id is None:
-        for k in states:
-            info.append(states[k])
-    else:
-        id = 'State.' + id
-        info = states.get(id)
-    return render_template('9-states.html', states=info, id=id)
-    return render_template('9-states.html', state=id)
+@app.route('/states/<id>', strict_slashes=False)
+def state_id(id=None):
+    states = storage.all(State).values()
+    states_none = None
+    for state in states:
+        if id == state.id:
+            states_none = state
+            break
+    return render_template('9-states.html', states=states, id=id, states_none=states_none)
 
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
