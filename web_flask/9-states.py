@@ -1,10 +1,9 @@
 #!/usr/bin/python3
-""" Write a script that starts a Flask web application:
-"""
+""" starts a Flask web application """
 from flask import Flask
 from flask import render_template
-from models.state import State
 from models import storage
+from models.state import State
 
 
 app = Flask(__name__)
@@ -19,6 +18,9 @@ def states():
 
 @app.route("/states/<id>", strict_slashes=False)
 def states_id(id):
+    """ if found, display the list of city linked
+        to the state sorted by name, else H1 not found
+    """
     state_id = None
     states = storage.all(State)
     for state in states.values():
