@@ -1,29 +1,16 @@
-
 <!DOCTYPE html>
 <HTML lang="en">
     <HEAD>
         <TITLE>HBNB</TITLE>
     </HEAD>
     <BODY>
-        {% if states %}
-        <H1>States</H1>
-        <UL>
-            {% for state in states %}
-            <LI>{{ state.id }}: <B>{{ state.name }} </B></LI>
-            {% endfor %}
-        </UL>
-        {% elif state_id %}
-        <H1>State:</H1>
+        {% if is_found %}
+        <H1>States: {{state_item.name}}</H1>
         <H3>Cities:</H3>
         <UL>
-            <LI>{{ state_id.id }}: <B>{{ state_id.name }} </B>
-                <UL>
-                    {% for city in state_id.cities | sort(attribute='name') %}
-                    <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
-                    {% endfor %}
-                </UL>
-            </LI>
-             {% endfor %}
+            {% for city in city_item %}
+            <LI>{{city.id}}: <B>{{city.name}}</B></LI>
+            {% endfor %}
         </UL>
         {% else %}
         <H1>Not found!</H1>
